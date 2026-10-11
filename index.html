@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOP Generator</title>
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;500;600&family=Michroma&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="site-header" id="site-header">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span class="brand-name">SOP Generator</span>
+      </a>
+
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+      <label for="nav-toggle" class="nav-burger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </label>
+
+      <ul class="nav-links">
+        <li><a href="#top" data-section="welcome" class="active" aria-current="page">Dashboard</a></li>
+        <li><a href="#create" data-section="create">New SOP</a></li>
+        <li><a href="#">My SOPs</a></li>
+        <li><a href="#">Templates</a></li>
+        <li><a href="#">Help</a></li>
+      </ul>
+
+      <a class="nav-profile" href="#" aria-label="Your account">
+        <span class="avatar">JD</span>
+      </a>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- Welcome -->
+    <section class="welcome" id="welcome">
+      <div class="welcome-text">
+        <h1 id="typing-title"
+            data-text="Turn how you work into clear, step-by-step instructions."
+            aria-label="Turn how you work into clear, step-by-step instructions.">
+          <span class="ghost" aria-hidden="true">Turn how you work into clear, step-by-step instructions.</span><span class="typed" aria-hidden="true"></span>
+        </h1>
+        <p>
+          Describe a process in your own words. The AI organizes it into a
+          standard operating procedure your whole team can follow.
+        </p>
+        <a class="btn btn-primary" href="#create">Start a new SOP</a>
+      </div>
+
+      <ol class="steps" aria-label="How it works">
+        <li>
+          <span class="step-num">1</span>
+          <div>
+            <h2>Describe the process</h2>
+            <p>Write it the way you'd explain it to a new teammate.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <div>
+            <h2>Generate</h2>
+            <p>The AI structures it into purpose, steps, and responsibilities.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <div>
+            <h2>Review and share</h2>
+            <p>Edit anything you like, then send it to your team.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Create SOP -->
+    <section class="create" id="create">
+      <div class="create-grid">
+
+        <form class="sop-form" id="sop-form" action="#" method="post" novalidate>
+          <div class="form-head">
+            <h2>New SOP</h2>
+            <p>Fill in what you know. Only the first two fields are required.</p>
+            <div class="progress" aria-live="polite">
+              <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+              <span class="progress-label" id="progress-label">0 of 5 fields filled</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="sop-title">SOP title</label>
+            <input type="text" id="sop-title" name="title" placeholder="e.g. Onboarding a new customer" required aria-describedby="title-error">
+            <span class="error" id="title-error" hidden>Add a title so you can find this SOP later.</span>
+          </div>
+
+          <div class="field">
+            <label for="sop-process">Describe the process</label>
+            <textarea id="sop-process" name="process" rows="6" placeholder="Walk through what happens from start to finish. Don't worry about formatting. For example: 'When a customer signs up, we send a welcome email, create their account, then book a kickoff call...'" required aria-describedby="process-error process-count"></textarea>
+            <span class="error" id="process-error" hidden>Describe the process so the AI has something to work with.</span>
+            <span class="hint" id="process-count">The more detail you add, the better the result.</span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="sop-department">Department</label>
+              <select id="sop-department" name="department">
+                <option value="">Select a department</option>
+                <option>Operations</option>
+                <option>Customer support</option>
+                <option>Sales</option>
+                <option>Human resources</option>
+                <option>Finance</option>
+                <option>IT</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="sop-role">Who performs it?</label>
+              <input type="text" id="sop-role" name="role" placeholder="e.g. Support agent">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="sop-tools">Tools or systems used</label>
+            <input type="text" id="sop-tools" name="tools" placeholder="e.g. Slack, Salesforce, Google Sheets">
+          </div>
+
+          <fieldset class="field detail">
+            <legend>Level of detail</legend>
+            <div class="choices">
+              <label class="choice">
+                <input type="radio" name="detail" value="brief">
+                <span>Brief</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="detail" value="standard" checked>
+                <span>Standard</span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="detail" value="detailed">
+                <span>Detailed</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large" id="generate-btn">
+              <span class="btn-label">Generate SOP</span>
+            </button>
+            <button type="reset" class="btn btn-ghost">Clear form</button>
+          </div>
+        </form>
+
+        <!-- Side panel -->
+        <aside class="side">
+          <div class="side-card">
+            <h3>What your SOP will include</h3>
+            <ul class="checklist">
+              <li>Purpose and scope</li>
+              <li>Who is responsible</li>
+              <li>Numbered steps in order</li>
+              <li>Tools and materials needed</li>
+              <li>Common mistakes to avoid</li>
+            </ul>
+          </div>
+
+          <div class="side-card tip">
+            <h3>Tip for a better SOP</h3>
+            <p>Name the trigger. What event starts this process, and what does "done" look like?</p>
+          </div>
+
+          <div class="side-card">
+            <h3>Recent SOPs</h3>
+            <p class="empty" id="recent-empty">Nothing here yet. Your generated SOPs will appear in this list.</p>
+            <ul class="recent" id="recent-list" hidden></ul>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+    <!-- Generated SOP -->
+<section id="sop-result" class="side-card" hidden>
+  <h2 id="result-title">Generated SOP</h2>
+
+  <h3>Objective</h3>
+  <p id="result-objective"></p>
+
+  <h3>Scope</h3>
+  <p id="result-scope"></p>
+
+  <h3>Roles and Responsibilities</h3>
+  <ul id="result-roles"></ul>
+
+  <h3>Procedure Steps</h3>
+  <ol id="result-steps"></ol>
+
+  <h3>Checklist</h3>
+  <ul id="result-checklist"></ul>
+
+  <h3>Workflow</h3>
+  <ol id="result-workflow"></ol>
+
+  <p id="result-note"></p>
+
+  <button type="button" id="download-sop" class="btn btn-primary">
+    Download SOP (.txt)
+  </button>
+</section>
+  </main>
+
+  <footer class="site-footer">
+    <p>SOP Generator &middot; Prototype. Nothing you type here is saved or sent.</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
