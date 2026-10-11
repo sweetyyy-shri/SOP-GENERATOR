@@ -1,14 +1,14 @@
-/* SOP Generator: front-end interactions only (no backend) */
+* SOP Generator: front-end interactions only (no backend) */
 (function () {
   "use strict";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- 1. Typing headline (about 5 seconds) ---------- */
-  var title = document.getElementById("typing-title");
-  var typed = title.querySelector(".typed");
-  var fullText = title.getAttribute("data-text");
-  var DURATION = 3000; // milliseconds for the whole headline
+ var title = document.getElementById("typing-title");
+var typed = title ? title.querySelector(".typed") : null;
+var fullText = title ? title.getAttribute("data-text") : "";
+var DURATION = 3000; // milliseconds for the whole headline
 
   function startTyping() {
     var start = null;
@@ -25,17 +25,22 @@
     requestAnimationFrame(tick);
   }
 
+if (typed && fullText) {
   if (reduceMotion) {
     typed.textContent = fullText;
     typed.classList.add("done");
   } else {
-    var begin = function () { setTimeout(startTyping, 350); };
+    var begin = function () {
+      setTimeout(startTyping, 350);
+    };
+
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(begin);
     } else {
       begin();
     }
   }
+}
 
   /* ---------- 2. Header shadow on scroll ---------- */
   var header = document.getElementById("site-header");
@@ -85,11 +90,27 @@
   var progressLabel = document.getElementById("progress-label");
   var processCount = document.getElementById("process-count");
 
-  function updateProgress() {
-    var filled = progressFields.filter(function (f) { return f.value.trim() !== ""; }).length;
-    progressFill.style.width = (filled / progressFields.length) * 100 + "%";
-    progressLabel.textContent = filled + " of " + progressFields.length + " fields filled";
+ function updateProgress() {
+  var filled = progressFields.filter(function (f) {
+    return f && f.value.trim() !== "";
+  }).length;
+
+  if (progressFill) {
+    progressFill.style.width =
+      (filled / progressFields.length) * 100 + "%";
   }
+
+  if (progressLabel) {
+    progressLabel.textContent =
+      filled + " of " + progressFields.length + " fields filled";
+  }
+}
+progressFields.forEach(function (field) {
+  if (field) {
+    field.addEventListener("input", updateProgress);
+    field.addEventListener("change", updateProgress);
+  }
+});
 
   function updateCounter() {
     var n = processInput.value.trim().length;
@@ -160,7 +181,13 @@
         })
       });
 
-      var data = await response.json();
+      var data;
+
+try {
+  data = await response.json();
+} catch (error) {
+  throw new Error("The server returned an invalid response. Please try again.");
+}
 
       if (!response.ok) {
         throw new Error(data.error || "Could not generate SOP.");
@@ -207,7 +234,10 @@ result.scrollIntoView({ behavior: "smooth" });
   });
   updateProgress();
 })();
-document.getElementById("download-sop").addEventListener("click", () => {
+const downloadButton = document.getElementById("download-sop");
+
+if (downloadButton) {
+  downloadButton.addEventListener("click", () => {
     const result = document.getElementById("sop-result");
 
     const content = [
@@ -249,3 +279,4 @@ document.getElementById("download-sop").addEventListener("click", () => {
 
     URL.revokeObjectURL(url);
 });
+}
