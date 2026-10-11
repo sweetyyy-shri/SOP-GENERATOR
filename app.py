@@ -1,8 +1,20 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
-CORS(app)
+
+# Allow your frontend to access the backend.
+# Replace this with your actual Netlify URL after deployment.
+frontend_url = os.environ.get("FRONTEND_URL")
+
+if frontend_url:
+    CORS(app, resources={
+        r"/api/*": {"origins": frontend_url}
+    })
+else:
+    # Allows local development when FRONTEND_URL is not configured.
+    CORS(app)
 
 
 @app.route("/api/health", methods=["GET"])
@@ -14,9 +26,9 @@ def health():
 def generate_sop():
     data = request.get_json(silent=True) or {}
 
-    department = data.get("department", "").strip()
-    process = data.get("process", "").strip()
-    description = data.get("description", "").strip()
+    department = str(data.get("department", "")).strip()
+    process = str(data.get("process", "")).strip()
+    description = str(data.get("description", "")).strip()
 
     if not department or not process or not description:
         return jsonify({
@@ -71,4 +83,7 @@ def generate_sop():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
+
+
