@@ -33,9 +33,12 @@
         <li><a href="#">Help</a></li>
       </ul>
 
-      <a class="nav-profile" href="#" aria-label="Your account">
-        <span class="avatar">JD</span>
-      </a>
+      <div class="nav-profile">
+    <span class="avatar" id="user-avatar">U</span>
+    <button type="button" id="logout-btn" class="btn btn-ghost">
+        Logout
+    </button>
+</div>
     </nav>
   </header>
 
@@ -218,11 +221,50 @@
   </main>
 
   <footer class="site-footer">
-    <p>SOP Generator &middot; Prototype. Nothing you type here is saved or sent.</p>
+   <p>SOP Generator &middot; Review generated procedures before using them.</p>
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="script.js"></script>
+  <script type="module">
+    import { auth } from "./firebase.js";
+
+    import {
+        onAuthStateChanged,
+        signOut
+    } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+
+    const logoutBtn = document.getElementById("logout-btn");
+    const avatar = document.getElementById("user-avatar");
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.replace("./login.html");
+            return;
+        }
+
+        console.log("Logged in as:", user.email);
+
+        // Display the first letter of the user's email.
+        if (avatar) {
+            avatar.textContent = user.email
+                ? user.email.charAt(0).toUpperCase()
+                : "U";
+        }
+    });
+logoutBtn?.addEventListener("click", async () => {
+        logoutBtn.disabled = true;
+
+        try {
+            await signOut(auth);
+            window.location.replace("./login.html");
+        } catch (error) {
+            console.error("Logout failed:", error);
+            alert("Unable to log out. Please try again.");
+            logoutBtn.disabled = false;
+        }
+    });
+</script>F
 </body>
 </html>
